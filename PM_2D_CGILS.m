@@ -1,23 +1,30 @@
-% Simplified Langevin model to calculate ensemble of particle trajectories
-% from U and V winds, variances, and relaxation timescales
+% Langevin particle model to calculate an ensemble of particle trajectories
+% from boundary-layer-averaged U and V winds, variances, and relaxation timescales
+% taken from a large-domain LES of a ship track. The case being modeled here is the 
+% S12 CGILS case, a relatively shallow boundary layer (~700 m) with precipitation 
+% in the non-track region. 
 
 % Parameters
-ens_num = 3;
-part_num = 1000;
+ens_num = 1; %number of ship tracks
+part_num = 1000; %number of particles injected per ship at each injection time
 x_range = 500; % km
 y_range = 500; % km
 %particle decay timescale 
 tau_decay = 2; %days
+%C_0 values from McMichael et al. 2024, GMD
 %C_0 for precipitating cases
 C_0 = 0.15;
-%C_0 for non-precipitating cases
+%C_0 for non-precipitating cases 
 %C_0 = 0.5;
 dt = 900; % time step of particle model in seconds
 injection_rate = 10^16; %particles per second
-bl_depth = 1000.0; %boundary layer depth in meters
-rho_mg = 1.15*10^6; %g/m3
+bl_depth = 1000.0; %approx. boundary layer depth in meters
+rho_mg = 1.15*10^6; %approx. density (g/m3)
 total_deleted_from_first_group = 0.0;
-% Define the injection schedule
+
+%Define the injection schedule 
+%default setting is to inject for the entire period
+%
 injection_duration = 24 * 3600; % hours --> seconds
 total_cycle_duration = 24 * 3600; % hours --> seconds
 
@@ -38,6 +45,7 @@ t_start = fix(time_start_index);
 dt_data = 900.0; % time step in input data (s)
 new_time = transpose(start_t:dt:end_t);
 new_time_hr = new_time / 3600.0;
+day_save = 10.0; %save the day 10 data
 num_step = 1;
 
 %plotting parameters
@@ -51,7 +59,7 @@ save_size = (day_s / save_interval) + 1;
 day_index = find(new_time==day_s);
 MEAN_U_day = MEAN_U(1:day_index);
 MEAN_U2_day = MEAN_U2(1:day_index);
-MEAN_V_day = MEAN_U(1:day_index);
+MEAN_V_day = MEAN_V(1:day_index);
 MEAN_V2_day = MEAN_V2(1:day_index);
 NEW_TS_day = NEW_TS(1:day_index);
 
@@ -178,7 +186,7 @@ for n = dt_ind_start:length(new_time)
             part_pos_y = [part_pos_y; part_pos_init_y];
             part_vel_u = [part_vel_u; part_vel_u_init];
             part_vel_v = [part_vel_v; part_vel_v_init];
-            part_release_time = [part_release_time; repmat(current_time / 3600, part_num, 1)]; % release time in hoursm
+            part_release_time = [part_release_time; repmat(current_time / 3600, part_num, 1)]; % release time in hours
         end
     end
 
@@ -256,7 +264,6 @@ for n = dt_ind_start:length(new_time)
     disp(['Number of particles after deletion: ', num2str(length(part_release_time))]);
 
     % Plot the positions every save_interval
-    day_save = 10.0; %save the day 10 data
     if mod(current_time, save_interval) == 0
 
          % Calculate particle ages
@@ -422,9 +429,6 @@ for n = dt_ind_start:length(new_time)
         y_blocks = floor(y_size / block_size);
 
         coarse_particle_concentration = zeros(x_blocks, y_blocks);
-
-        % Compute the peak concentration for this time step
-        peak_concentration(n) = max(particle_concentration(:));
 
         for i = 1:x_blocks
             for j = 1:y_blocks
