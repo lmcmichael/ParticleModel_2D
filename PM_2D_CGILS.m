@@ -24,7 +24,6 @@ total_deleted_from_first_group = 0.0;
 
 %Define the injection schedule 
 %default setting is to inject for the entire period
-%
 injection_duration = 24 * 3600; % hours --> seconds
 total_cycle_duration = 24 * 3600; % hours --> seconds
 
