@@ -135,7 +135,7 @@ y_edges = linspace(0, y_range * 1000, grid_size + 1);
 x_range_m = x_range * 1000; % Convert to meters
 y_range_m = y_range * 1000; % Convert to meters
 
-% Coarse grain the particle_concentration_young matrix
+% Coarse grain the particle_concentration matrix
 block_size = 5; % 5-km coarse graining
 x_blocks = floor((x_range) / block_size);
 y_blocks = floor((y_range) / block_size);
@@ -145,8 +145,6 @@ particle_conc_2D = zeros(x_blocks, y_blocks, save_size);
 particle_conc_2D_young = zeros(x_blocks, y_blocks, save_size);
 particle_conc_2D_mid = zeros(x_blocks, y_blocks, save_size);
 particle_conc_2D_old = zeros(x_blocks, y_blocks, save_size);
-
-peak_concentration = zeros(1, length(new_time));
 
 % Main time loop to calculate each ensemble particle trajectory
 for n = dt_ind_start:length(new_time)
