@@ -117,7 +117,7 @@ dt_ind = fix((double(t_s(t_start)) / dt_data) + 1);
 % Initialize particle velocities
 std_dev_vel = 0.0;
 mean_u_vel = MEAN_U(dt_ind);
-mean_v_vel = MEAN_U(dt_ind);
+mean_v_vel = MEAN_V(dt_ind);
 
 % Calculate first time point in new time array
 dt_ind_start = round((double(dt_data) / double(dt)) * (dt_ind - 1));
@@ -410,7 +410,6 @@ for n = dt_ind_start:length(new_time)
         end
 
         close(gcf);
-
 
         % Calculate and plot particle density/concentration
         figure('visible', 'off');
