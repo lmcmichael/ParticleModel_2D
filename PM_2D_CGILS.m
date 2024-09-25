@@ -55,7 +55,7 @@ age_gif_initialized = false;
 save_size = (day_s / save_interval) + 1;
 
 %copy diurnal cycle from day 1 repeatedly 
-day_index = find(new_time==day_s);
+day_index = find(time_les==day_s);
 MEAN_U_day = MEAN_U(1:day_index);
 MEAN_U2_day = MEAN_U2(1:day_index);
 MEAN_V_day = MEAN_V(1:day_index);
