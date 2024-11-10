@@ -13,6 +13,9 @@
 
 %C_0 parameter changes as a function of precipitation. Case is considered
 %precipitating if the surface rain rate is greater than 0.01 mm/day
+
+%particles decay to represent deposition processes on an e-folding timescale
+%set by tau_decay
 %--------------------------------------------------------------------------
 case_name = 0220180808;
 
